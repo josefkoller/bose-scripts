@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/bin/zsh
+
+cd $(dirname "$0")
+source bose.cfg
 
 # Check argument was passed.
 if [[ -z "$1" ]]
@@ -21,12 +24,12 @@ fi
 ./bose-key.exp stop
 
 # Clear any previous audio files.
-rm -f /tmp/bose-audio/in.mp3
-mkdir -p /tmp/bose-audio
+rm -f $temp_audiofile
 
 # Convert to mp3 so Bose understands.
-ffmpeg -i "$src" -metadata album="PC" -codec:a libmp3lame -qscale:a 2 /tmp/bose-audio/in.mp3
+$converter -i "$src" -metadata album="PC" -codec:a libmp3lame -qscale:a 2 $temp_audiofile
 
 # Instruct Bose to play.
-./bose-key.exp preset_1
+./bose-key.exp preset_$preset
 ./bose-key.exp prev
+
